@@ -1,21 +1,7 @@
-import express, { json } from "express"
-import cors from "cors"
-import joi from "joi"
-import { MongoClient } from "mongodb"
-import dotenv from "dotenv"
 import bcrypt from "bcrypt"
 import { v4 as uuid } from "uuid" 
-
-dotenv.config()
-const server = express()
-server.use(cors())
-server.use(json())
-
-const mongoClient = new MongoClient(process.env.MONGO_URI)
-let db
-mongoClient.connect(() => {
-  db = mongoClient.db("MyWallet")
-})
+import db from "../db.js"
+import joi from "joi"
 
 /* Schemas */
 const userSchema = joi.object({
@@ -29,9 +15,7 @@ const loginSchema = joi.object({
   password: joi.string().required()
 })
 
-
-/* SignUp route */
-server.post("/sign-up", async (req, res) => {
+export async function signUp(req, res){
   const user = req.body
 
   const validation = userSchema.validate(user)
@@ -52,9 +36,9 @@ server.post("/sign-up", async (req, res) => {
   } catch (error) {
     res.sendStatus(500);
   }
-})
+}
 
-server.post("/login", async (req, res) => {
+export async function signIn(req, res){
   const user = req.body
 
   const validation = loginSchema.validate(user)
@@ -80,6 +64,4 @@ server.post("/login", async (req, res) => {
   } catch {
     res.sendStatus(500);
   }
-})
-
-server.listen(5000, () => console.log("Listening on port 5000"))
+}
