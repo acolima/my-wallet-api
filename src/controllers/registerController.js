@@ -9,12 +9,12 @@ const registerScheme = joi.object({
   date: joi.string()
 })
 
-export async function addIncome(req, res){
+export async function addRegister(req, res){
   const { authorization } = req.headers
   const token = authorization?.replace("Bearer ", "")
-  const income = req.body
+  const register = req.body
 
-  const validation = registerScheme.validate(income)
+  const validation = registerScheme.validate(register)
   if(validation.error)
     return res.status(422).send("Todos os campos devem ser preenchidos")
 
@@ -24,29 +24,7 @@ export async function addIncome(req, res){
     if(!user)
       return res.sendStatus(401)
 
-    await db.collection("registers").insertOne({...income, userId: user.userId})
-    res.sendStatus(201)
-  } catch {
-    res.sendStatus(500)
-  }
-}
-
-export async function addExpense(req, res){
-  const { authorization } = req.headers
-  const token = authorization?.replace("Bearer ", "")
-  const expense = req.body
-
-  const validation = registerScheme.validate(expense)
-  if(validation.error)
-    return res.status(422).send("Todos os campos devem ser preenchidos")
-
-  try {
-    const user = await db.collection("sessions").findOne({token})
-
-    if(!user)
-      return res.sendStatus(401)
-
-    await db.collection("registers").insertOne({...expense, userId: user.userId})
+    await db.collection("registers").insertOne({...register, userId: user.userId})
     res.sendStatus(201)
   } catch {
     res.sendStatus(500)

@@ -1,7 +1,7 @@
 import express, { json } from "express"
 import cors from "cors"
 import { signIn, signUp } from "./controllers/authController.js"
-import { addExpense, addIncome } from "./controllers/registerController.js"
+import { addRegister } from "./controllers/registerController.js"
 
 const server = express()
 server.use(cors())
@@ -13,8 +13,6 @@ server.post("/sign-up", signUp)
 server.post("/login", signIn)
 
 /* Registers routes */
-server.post("/add-income", addIncome)
-
-server.post("/add-expense", addExpense)
+server.post("/add-register", addRegister)
 
 server.listen(5000, () => console.log("Listening on port 5000"))
