@@ -65,3 +65,23 @@ export async function signIn(req, res){
     res.sendStatus(500);
   }
 }
+
+export default async function signOut(req, res){
+  const { authorization } = req.headers
+  const token = authorization?.replace("Bearer ", "")
+
+  if(!token) 
+    return res.sendStatus(401);
+
+  try {
+    const user = await db.collection("sessions").findOne({token})
+
+    if(!user)
+      return res.sendStatus(401)
+
+    await db.collection("sessions").deleteOne({token: user.token})
+    res.sendStatus(200)
+  } catch {
+    res.sendStatus(500)
+  }
+}

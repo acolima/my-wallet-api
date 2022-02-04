@@ -13,6 +13,9 @@ export async function addRegister(req, res){
   const { authorization } = req.headers
   const token = authorization?.replace("Bearer ", "")
   const register = req.body
+  
+  if(!token) 
+    return res.sendStatus(401);
 
   const validation = registerScheme.validate(register)
   if(validation.error)
@@ -34,6 +37,9 @@ export async function addRegister(req, res){
 export async function getRegisters(req, res){
   const { authorization } = req.headers
   const token = authorization?.replace("Bearer ", "")
+
+  if(!token) 
+    return res.sendStatus(401);
 
   try {
     const user = await db.collection("sessions").findOne({token})
