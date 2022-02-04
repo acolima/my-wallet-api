@@ -2,6 +2,7 @@ import bcrypt from "bcrypt"
 import { v4 as uuid } from "uuid" 
 import db from "../db.js"
 import joi from "joi"
+import { stripHtml } from "string-strip-html"
 
 /* Schemas */
 const userSchema = joi.object({
@@ -16,7 +17,11 @@ const loginSchema = joi.object({
 })
 
 export async function signUp(req, res){
-  const user = req.body
+  const user = {
+    name: stripHtml(req.body.name).result.trim(),
+    email: stripHtml(req.body.email).result.trim(),
+    password: stripHtml(req.body.password).result.trim(),
+  }
 
   const validation = userSchema.validate(user)
   if(validation.error)
@@ -39,7 +44,10 @@ export async function signUp(req, res){
 }
 
 export async function signIn(req, res){
-  const user = req.body
+  const user = {
+    email: stripHtml(req.body.email).result.trim(),
+    password: stripHtml(req.body.password).result.trim()
+  }
 
   const validation = loginSchema.validate(user)
   if(validation.error)

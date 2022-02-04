@@ -1,5 +1,7 @@
 import joi from "joi"
+import { stripHtml } from "string-strip-html"
 import db from "../db.js"
+import dayjs from "dayjs"
 
 /* Schemes */
 const registerScheme = joi.object({
@@ -12,7 +14,12 @@ const registerScheme = joi.object({
 export async function addRegister(req, res){
   const { authorization } = req.headers
   const token = authorization?.replace("Bearer ", "")
-  const register = req.body
+  const register = {
+    amount: stripHtml(req.body.amount).result.trim(),
+    description: stripHtml(req.body.description).result.trim(),
+    type: req.body.type,
+    date: dayjs().format("DD/MM")
+  }
   
   if(!token) 
     return res.sendStatus(401);
