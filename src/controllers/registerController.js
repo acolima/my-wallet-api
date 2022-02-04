@@ -30,3 +30,19 @@ export async function addRegister(req, res){
     res.sendStatus(500)
   }
 }
+
+export async function getRegisters(req, res){
+  const { authorization } = req.headers
+  const token = authorization?.replace("Bearer ", "")
+
+  try {
+    const user = await db.collection("sessions").findOne({token})
+    if(!user)
+      return res.sendStatus(401)
+
+    const registers = await db.collection("registers").find({userId: user.userId}).toArray()
+    res.send(registers)
+  } catch {
+    res.sendStatus(500)
+  }
+}
