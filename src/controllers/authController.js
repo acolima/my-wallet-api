@@ -74,7 +74,7 @@ export async function signIn(req, res){
   }
 }
 
-export default async function signOut(req, res){
+export async function signOut(req, res){
   const { authorization } = req.headers
   const token = authorization?.replace("Bearer ", "")
 
