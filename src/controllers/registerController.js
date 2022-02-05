@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb"
 import db from "../db.js"
 
 export async function addRegister(req, res){
@@ -23,4 +24,15 @@ export async function getRegisters(req, res){
   } catch {
     res.sendStatus(500)
   }  
+}
+
+export async function deleteRegister(req, res){
+  const { id } = req.params
+  try {
+    await db.collection("registers").deleteOne({_id: ObjectId(id)})
+
+    res.sendStatus(200)
+  } catch {
+    res.sendStatus(500)
+  }
 }
