@@ -1,32 +1,10 @@
 import bcrypt from "bcrypt"
 import { v4 as uuid } from "uuid" 
 import db from "../db.js"
-import joi from "joi"
-import { stripHtml } from "string-strip-html"
-
-/* Schemas */
-const userSchema = joi.object({
-  name: joi.string().required(),
-  email: joi.string().required(),
-  password: joi.string().required()
-})
-
-const loginSchema = joi.object({
-  email: joi.string().required(),
-  password: joi.string().required()
-})
 
 export async function signUp(req, res){
-  const user = {
-    name: stripHtml(req.body.name).result.trim(),
-    email: stripHtml(req.body.email).result.trim(),
-    password: stripHtml(req.body.password).result.trim(),
-  }
+  const { user } = res.locals
 
-  const validation = userSchema.validate(user)
-  if(validation.error)
-    return res.status(422).send("Todos os campos devem ser preenchidos")
-  
   try {
     const usersCollection = db.collection("users")
     
@@ -44,17 +22,9 @@ export async function signUp(req, res){
 }
 
 export async function signIn(req, res){
-  const user = {
-    email: stripHtml(req.body.email).result.trim(),
-    password: stripHtml(req.body.password).result.trim()
-  }
-
-  const validation = loginSchema.validate(user)
-  if(validation.error)
-    return res.status(422).send("Todos os campos devem ser preenchidos")
+  const { user } = res.locals
   
-
-  try{
+  try{    
     const userRegistered = await db.collection("users").findOne({email: user.email})
     
     if(!userRegistered)
@@ -75,19 +45,11 @@ export async function signIn(req, res){
 }
 
 export async function signOut(req, res){
-  const { authorization } = req.headers
-  const token = authorization?.replace("Bearer ", "")
-
-  if(!token) 
-    return res.sendStatus(401);
+  const { session } = res.locals
 
   try {
-    const user = await db.collection("sessions").findOne({token})
+    await db.collection("sessions").deleteOne({token: session.token})
 
-    if(!user)
-      return res.sendStatus(401)
-
-    await db.collection("sessions").deleteOne({token: user.token})
     res.sendStatus(200)
   } catch {
     res.sendStatus(500)

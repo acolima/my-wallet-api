@@ -1,9 +1,12 @@
 import { Router } from "express"
 import { addRegister, getRegisters } from "../controllers/registerController.js"
+import { tokenValidationMiddleware, registerValidationMiddleware } from "../middlewares/index.js"
 
 const registerRouter = Router()
 
-registerRouter.post("/add-register", addRegister)
+registerRouter.use(tokenValidationMiddleware)
+
+registerRouter.post("/add-register", registerValidationMiddleware, addRegister)
 
 registerRouter.get("/registers", getRegisters)
 
