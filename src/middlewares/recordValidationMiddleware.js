@@ -2,7 +2,7 @@ import dayjs from "dayjs"
 import joi from "joi"
 import { stripHtml } from "string-strip-html"
 
-const registerScheme = joi.object({
+const recordScheme = joi.object({
   amount: joi.string().required(),
   description: joi.string().required(),
   type: joi.string().valid('income', 'expense').required(),
@@ -10,18 +10,18 @@ const registerScheme = joi.object({
 })
 
 export default function registerValidationMiddleware(req, res, next){
-  const register = {
+  const record = {
     amount: stripHtml(req.body.amount).result.trim(),
     description: stripHtml(req.body.description).result.trim(),
     type: req.body.type,
     date: dayjs().format("DD/MM")
   }
   
-  const validation = registerScheme.validate(register)
+  const validation = recordScheme.validate(record)
   if(validation.error)
     return res.status(422).send("Todos os campos devem ser preenchidos")
   
-  res.locals.register = register
+  res.locals.record = record
 
   next()
 }
