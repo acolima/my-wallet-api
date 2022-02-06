@@ -4,7 +4,14 @@ import router from "./routes/index.js"
 
 const server = express()
 
-server.use(cors())
+// server.use(cors())
+
+server.use(
+  cors({
+    origin: "http://localhost:3000", 
+    credentials: true,
+  })
+);
 server.use(json())
 
 server.use(router)
