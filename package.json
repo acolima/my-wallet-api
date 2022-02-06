@@ -5,8 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/app.js",
-		"dev": "npx nodemon ./src/app.js"
+    "start": "node ./src/app.js"
   },
   "repository": {
     "type": "git",
@@ -26,11 +25,12 @@
     "express": "^4.17.2",
     "joi": "^17.6.0",
     "mongodb": "^4.3.1",
-    "nodemon": "^2.0.15",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
+    "uuid": "^8.3.2",
     "dayjs": "^1.10.7",
     "string-strip-html": "^9.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+    
   }
 }
