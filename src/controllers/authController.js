@@ -33,6 +33,8 @@ export async function signIn(req, res){
     if(!bcrypt.compareSync(user.password, userRegistered.password))
       return res.status(401).send("Email e/ou senha incorretos")
     
+    await db.collection("sessions").deleteMany({userId: userRegistered._id})
+      
     const token = uuid()
     await db.collection("sessions").insertOne({token, userId: userRegistered._id})
 
