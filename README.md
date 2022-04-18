@@ -1,7 +1,5 @@
 # MyWallet API
 
-API for the project MyWallet
-
 MyWallet is an easy and simple way to manage your financial transactions. 
 
 ## Implemented features
