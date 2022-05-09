@@ -49,6 +49,8 @@ npm run dev
 ```
 7. You can check the front-end repository of this project at https://github.com/acolima/MyWallet_Front and follow the instructions to run
 
+API documentation can be found at the `Wiki` tab or https://github.com/acolima/my-wallet-api/wiki
+
 ## Author
 <img src='https://avatars.githubusercontent.com/acolima' width='150px'/>
 
